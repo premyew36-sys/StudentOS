@@ -1,0 +1,459 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudentOS | Your student life, organized</title>
+<style>
+:root{
+  --bg:#f5f6fc;--panel:#fff;--ink:#20233b;--muted:#777d98;
+  --purple:#7057e8;--purple2:#8e7afa;--line:#e9eaf3;
+  --green:#dff7e9;--red:#fff0f0;--shadow:0 12px 35px #30345b0b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:100vh}
+aside{background:#20213d;color:white;padding:25px 16px;display:flex;flex-direction:column;gap:22px}
+.brand{font-size:23px;font-weight:850;letter-spacing:-1px;padding:0 10px}
+.brand span{color:#a99aff}
+.brand small{display:block;font-size:11px;font-weight:500;color:#aaaac7;letter-spacing:1px;margin-top:5px}
+.nav{display:grid;gap:6px}
+.nav button{border:0;background:transparent;color:#c9c8e0;text-align:left;
+padding:12px;border-radius:11px;display:flex;gap:11px;align-items:center}
+.nav button:hover,.nav button.active{background:#38365f;color:white}
+.sidebar-note{margin-top:auto;background:#302f52;border:1px solid #45436a;padding:15px;border-radius:15px;font-size:12px;color:#c9c8e0;line-height:1.6}
+main{padding:28px;min-width:0;max-width:1500px;width:100%;margin:auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:25px}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:1.6px;color:var(--purple);text-transform:uppercase}
+h1{font-size:clamp(25px,3vw,35px);letter-spacing:-1.2px;margin:5px 0}
+h2{font-size:19px;margin:0 0 15px;letter-spacing:-.4px}
+h3{font-size:15px;margin:0 0 8px}
+p{line-height:1.6}
+.muted{color:var(--muted);font-size:13px}
+.avatar{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;
+background:#e9e5ff;color:#5b45c9;font-weight:800}
+.grid{display:grid;gap:16px}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin:20px 0}
+.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:19px;
+padding:20px;box-shadow:var(--shadow);min-width:0}
+.hero{background:linear-gradient(120deg,#5141b9,#846af0 68%,#b2a5ff);
+color:white;padding:27px;border-radius:23px;position:relative;overflow:hidden}
+.hero:after{content:"✦";position:absolute;font-size:140px;right:28px;top:-24px;opacity:.14}
+.hero h2{font-size:25px;max-width:550px}
+.hero p{color:#eeebff;max-width:570px;font-size:14px}
+.hero .btn{background:white;color:#5744bf}
+.stat-number{font-size:29px;font-weight:850;letter-spacing:-1px;margin:9px 0}
+.stat-label{font-size:12px;color:var(--muted)}
+.stat-icon{font-size:22px}
+.btn{border:0;border-radius:10px;padding:10px 14px;background:var(--purple);
+color:white;font-weight:700;font-size:13px}
+.btn:hover{filter:brightness(.96)}
+.btn.secondary{background:#eeebff;color:#5b45c9}
+.btn.light{background:#f1f2f9;color:var(--ink)}
+.btn.danger{background:#ffe6e6;color:#a72d39}
+.btn.small{padding:7px 10px;font-size:12px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.wrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-block;border-radius:99px;padding:5px 9px;background:#eeebff;
+color:#5b45c9;font-size:11px;font-weight:750}
+.pill.green{background:#e0f7e9;color:#207b49}
+.pill.orange{background:#fff0da;color:#986015}
+.progress{height:7px;background:#eeedf7;border-radius:20px;overflow:hidden;margin:10px 0}
+.progress div{height:100%;background:linear-gradient(90deg,#7057e8,#aa9bff);border-radius:20px}
+.list{display:grid;gap:10px}
+.item{padding:12px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+input,select,textarea{width:100%;border:1px solid #e3e4ef;border-radius:10px;
+padding:10px 11px;background:white;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--purple)}
+.field{margin:10px 0}
+.checkline{display:flex;align-items:center;gap:9px;font-size:13px}
+.checkline input{width:auto}
+.checkline label{margin:0;color:var(--ink);font-size:13px}
+.taskdone{text-decoration:line-through;color:#999}
+.skill{border:1px solid var(--line);border-radius:15px;padding:15px;background:white}
+.skill .emoji{font-size:26px;margin-bottom:10px}
+.skill p{font-size:12px;color:var(--muted);margin:5px 0 12px}
+.skill .progress{margin-top:12px}
+.contact{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.contact input{width:17px;height:17px}
+.contact .avatar{width:39px;height:39px;flex-shrink:0}
+.contact .person{flex:1;min-width:0}
+.contact small{display:block;color:var(--muted);margin-top:3px}
+.timer{font-size:58px;letter-spacing:-2px;font-weight:850;text-align:center;margin:22px 0}
+.timer-ring{width:225px;height:225px;border-radius:50%;border:8px solid #e9e5ff;
+display:flex;flex-direction:column;align-items:center;justify-content:center;margin:20px auto;
+background:radial-gradient(circle,#fff 58%,#f5f2ff)}
+.center{text-align:center}
+.hidden{display:none!important}
+.notice{padding:12px;border-radius:12px;background:#f1efff;color:#5141a6;font-size:12px;line-height:1.6}
+.notice.warn{background:#fff4df;color:#8d5d13}
+.notice.danger{background:var(--red);color:#9a3039}
+.motivation-card{background:linear-gradient(135deg,#fff 0%,#f5f0ff 55%,#eefbff 100%);border:1px solid #ded6ff;position:relative;overflow:hidden}
+.motivation-quote{font-size:clamp(18px,2.2vw,24px);font-weight:850;line-height:1.4;letter-spacing:-.45px;background:linear-gradient(95deg,#5636c9,#b02b83 52%,#087f9b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.motivation-meaning{color:#444a68;font-size:13px;line-height:1.7}
+.motivation-action{color:#3f2b9c;font-weight:750}
+.consistency-number{font-size:28px;font-weight:850;letter-spacing:-1px;color:#5636c9}
+.checkin-btn{background:linear-gradient(100deg,#5a43d6,#8a52d6);color:#fff}
+.checkin-btn:disabled{opacity:.75;cursor:default}
+.emoji-original{font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-variant-emoji:emoji}
+.reward-card{background:linear-gradient(145deg,#fff 0%,#f4f0ff 100%);border:1px solid #dcd4ff}
+.reward-cost{font-size:25px;font-weight:900;letter-spacing:-.6px;color:#623bd0}
+.reward-title{font-weight:850;color:#4d318f}
+.habit-highlight{background:linear-gradient(110deg,#fff7e9,#fff0f5);border:1px solid #ffdfd0}
+.habit-step{padding:12px;border-radius:12px;background:#f7f6ff;border:1px solid #ebe7ff}
+.xp-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 11px;border-radius:99px;background:#e7fff1;color:#176b43;font-size:12px;font-weight:850}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:25px 0}
+@media(max-width:900px){
+ .app{grid-template-columns:1fr}
+ aside{padding:15px;gap:12px}
+ .brand small,.sidebar-note{display:none}
+ .nav{display:flex;overflow:auto;gap:5px}
+ .nav button{white-space:nowrap;padding:10px;font-size:12px}
+ main{padding:18px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:580px){
+ .two,.three{grid-template-columns:1fr}
+ .topbar{align-items:flex-start}
+ .card{padding:16px}
+ .hero{padding:21px}
+ .timer-ring{width:195px;height:195px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="brand">Student<span>OS</span><small>YOUR PERSONAL STUDENT SPACE</small></div>
+  <nav class="nav" id="nav"></nav>
+  <div class="sidebar-note">✦ Small steps. Real progress.<br><br>Your study plan should support your life, not take it over.</div>
+</aside>
+<main>
+  <div class="topbar">
+    <div><div class="eyebrow" id="sectionLabel">YOUR SPACE</div><h1 id="pageTitle">Welcome back 👋</h1></div>
+    <div class="avatar" title="Demo profile">S</div>
+  </div>
+  <div id="content"></div>
+  <footer>StudentOS prototype · Demo data only · No real accounts or contacts connected</footer>
+</main>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today=new Date(); today.setHours(0,0,0,0);
+const dateISO=d=>{const x=new Date(d);return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`};
+const addDays=n=>{let d=new Date(today);d.setDate(d.getDate()+n);return dateISO(d)};
+const dateLabel=d=>new Date(d+"T12:00:00").toLocaleDateString(undefined,{day:"numeric",month:"short"});
+const navItems=[
+ ["home","⌂","Dashboard"],["planner","▦","Study planner"],["tasks","✓","Tasks & deadlines"],
+ ["focus","◷","Focus room"],["skills","✦","Skills library"],["friends","♧","Friends & groups"],
+ ["notes","▤","Notes & revision"],["rewards","✧","Rewards & focus habits"],["safety","♡","Community safety"],["balance","☼","Life balance"]
+];
+let active="home";
+let subjects=[
+ {name:"Discrete Mathematics",exam:addDays(8),level:"High"},
+ {name:"Digital Electronics",exam:addDays(12),level:"Medium"},
+ {name:"Computer Fundamentals",exam:addDays(15),level:"Medium"},
+ {name:"Indian Knowledge System",exam:addDays(18),level:"Low"},
+ {name:"Web Technology",exam:addDays(21),level:"High"},
+ {name:"Communication Skills",exam:addDays(24),level:"Medium"}
+];
+let tasks=[
+ {id:1,title:"Revise logical propositions",subject:"Discrete Mathematics",due:addDays(1),priority:"High",steps:["Review definitions","Solve five practice questions","Check mistakes"],done:[false,false,false]},
+ {id:2,title:"Finish HTML practical",subject:"Web Technology",due:addDays(2),priority:"Medium",steps:["Read requirements","Build the page","Test and submit"],done:[false,false,false]},
+ {id:3,title:"Prepare communication notes",subject:"Communication Skills",due:addDays(3),priority:"Low",steps:["Read the chapter","Write key points"],done:[false,false]}
+];
+let notes=[
+ {title:"Truth tables",subject:"Discrete Mathematics",body:"A truth table shows the truth value of a logical expression for every possible combination."},
+ {title:"Computer characteristics",subject:"Computer Fundamentals",body:"Speed, accuracy, reliability, versatility and storage capacity."}
+];
+let skills=[
+ ["AI","Artificial intelligence basics","Understand AI, prompts, limitations and responsible use.","🤖","Beginner","Technology"],
+ ["Prompt writing","Writing better AI prompts","Practise clear instructions, context and output formats.","✍️","Beginner","Technology"],
+ ["Python","Python programming","Variables, conditions, loops, functions and small projects.","🐍","Beginner","Technology"],
+ ["Web development","HTML, CSS and JavaScript","Create responsive websites and interactive pages.","💻","Beginner","Technology"],
+ ["Data analysis","Spreadsheets and data","Organize, calculate and interpret data using spreadsheets.","📊","Beginner","Technology"],
+ ["Cybersecurity","Digital safety","Passwords, phishing, privacy and safe browsing.","🛡️","Beginner","Technology"],
+ ["Communication","Clear communication","Explain ideas, listen actively and communicate confidently.","💬","All levels","Communication"],
+ ["Public speaking","Speaking to an audience","Structure talks, practise delivery and manage nerves.","🎤","Beginner","Communication"],
+ ["Writing","Writing and storytelling","Improve grammar, clarity, structure and editing.","📝","All levels","Communication"],
+ ["Negotiation","Negotiation basics","Prepare options, ask questions and seek fair outcomes.","🤝","Intermediate","Communication"],
+ ["Graphic design","Design fundamentals","Learn layout, contrast, typography and visual hierarchy.","🎨","Beginner","Creative"],
+ ["Video editing","Video editing","Practise cuts, pacing, captions and sound balance.","🎬","Beginner","Creative"],
+ ["Photography","Photography basics","Explore light, framing and visual storytelling.","📷","Beginner","Creative"],
+ ["UI/UX design","Designing useful interfaces","Understand user needs, wireframes and usability testing.","🧩","Beginner","Creative"],
+ ["Entrepreneurship","Startup fundamentals","Identify problems, test ideas and understand customers.","🚀","Beginner","Business"],
+ ["Marketing","Digital marketing","Learn audiences, content planning and ethical promotion.","📣","Beginner","Business"],
+ ["E-commerce","Online business basics","Explore product selection, customer experience and operations.","🛒","Beginner","Business"],
+ ["Personal finance","Money management","Budgeting, saving, risk and financial decision-making.","💰","Beginner","Finance"],
+ ["Spreadsheets","Excel and Google Sheets","Use formulas, sorting, charts and simple trackers.","📈","Beginner","Business"],
+ ["Project management","Planning projects","Break work into tasks, estimate time and track progress.","🗂️","Beginner","Business"],
+ ["English","English language practice","Build vocabulary, grammar, reading and speaking fluency.","🌐","All levels","Languages"],
+ ["Hindi","Hindi communication","Practise vocabulary, writing and everyday communication.","📚","All levels","Languages"],
+ ["Time management","Managing your time","Prioritize tasks and plan realistic work sessions.","⏱️","Beginner","Life skills"],
+ ["Critical thinking","Reasoning and decisions","Check assumptions, evidence, alternatives and conclusions.","🔍","Beginner","Life skills"],
+ ["Study techniques","Learning how to learn","Use active recall, spaced repetition and practice tests.","🧠","Beginner","Life skills"],
+ ["Teamwork","Working with others","Share responsibilities, give feedback and solve disagreements.","🫱🏻‍🫲🏽","All levels","Life skills"],
+ ["Research","Finding reliable information","Compare sources, verify claims and take useful notes.","🔎","Beginner","Academic"],
+ ["Mathematics","Mathematical problem-solving","Practise logic, patterns, calculations and explanations.","➗","All levels","Academic"],
+ ["First aid awareness","Everyday safety awareness","Learn when to seek adult or professional emergency help.","🩹","Beginner","Life skills"],
+ ["Healthy cooking","Cooking fundamentals","Learn kitchen safety, basic meals and food planning.","🥗","Beginner","Life skills"]
+].map((s,i)=>({id:i+1,name:s[0],description:s[1],detail:s[2],icon:s[3],level:s[4],category:s[5],progress:0}));
+let contacts=[
+ {id:1,name:"Aarav",initial:"A",subject:"Mathematics",online:true},
+ {id:2,name:"Mira",initial:"M",subject:"Web Technology",online:true},
+ {id:3,name:"Ishaan",initial:"I",subject:"Digital Electronics",online:false},
+ {id:4,name:"Sana",initial:"S",subject:"Communication Skills",online:true},
+ {id:5,name:"Riya",initial:"R",subject:"Computer Fundamentals",online:false},
+ {id:6,name:"Kabir",initial:"K",subject:"AI & Python",online:true}
+];
+let selectedFriends=[];
+let groups=[];
+let plan=[
+ {time:"7:00–7:30",title:"Wake up and get ready",kind:"Routine"},
+ {time:"8:15–2:15",title:"College and classes",kind:"Classes"},
+ {time:"2:15–3:15",title:"Lunch and rest",kind:"Break"},
+ {time:"3:15–4:00",title:"Priority subject revision",kind:"Study"},
+ {time:"4:00–4:10",title:"Short screen-free break",kind:"Break"},
+ {time:"4:10–4:55",title:"Assignment: first small step",kind:"Study"},
+ {time:"5:00–6:00",title:"Exercise or personal time",kind:"Life"},
+ {time:"7:00–7:45",title:"Active recall and practice",kind:"Study"},
+ {time:"7:45 onward",title:"Dinner, free time and sleep routine",kind:"Life"}
+];
+let planUsed=false;
+let timerMode="work",remaining=25*60,interval=null;
+let scrollResetInterval=null,scrollResetRemaining=0;
+let warningCount=0,moderationLocked=false;
+let focusMinutes=0,completedSteps=0;
+let balanceChecks={sleep:false,food:false,movement:false,free:false};
+let consistency={lastCheckin:"",streak:0,total:0};
+// XP is earned from newly completed steps, focus sessions and one daily check-in.
+let rewardProgress={xp:0, rewardedSteps:[], lastHabitCheckin:"", habitCheckins:0, urgePauses:0, stock:{scratch:3,discount:2}, redeemed:[]};
+const rewardCatalog=[
+ {id:"scratch",name:"Real-life scratch card",detail:"A physical scratch card supplied by you or a trusted adult. This prototype cannot issue a real card.",cost:2000,stock:3,icon:"🎟️"},
+ {id:"discount",name:"Discount card",detail:"A genuine discount offer you add yourself. No retailer or discount is connected automatically.",cost:3500,stock:2,icon:"🏷️"}
+];
+function awardXP(amount,reason){rewardProgress.xp+=amount;save()}
+function toggleTaskStep(id,j,checked){const t=tasks.find(x=>x.id===id);if(!t)return;const key=String(id)+":"+j;const wasDone=!!t.done[j];t.done[j]=checked;if(checked&&!wasDone&&!rewardProgress.rewardedSteps.includes(key)){rewardProgress.rewardedSteps.push(key);rewardProgress.xp+=25;}save();render()}
+function checkInHabit(){const todayStr=todayKey();if(rewardProgress.lastHabitCheckin===todayStr)return;rewardProgress.lastHabitCheckin=todayStr;rewardProgress.habitCheckins+=1;rewardProgress.xp+=10;save();render()}
+function pauseScrollUrge(){rewardProgress.urgePauses+=1;save();alert("Pause logged. Put your phone out of reach, take a breath, and choose what you want to do next. If you still choose to scroll afterwards, restart without blaming yourself.");render()}
+function formatResetTime(seconds){const m=Math.floor(Math.max(0,seconds)/60),s=Math.max(0,seconds)%60;return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`}
+function startScrollReset(){if(scrollResetInterval||scrollResetRemaining>0)return;scrollResetRemaining=10*60;const btn=document.getElementById("scrollResetButton");if(btn){btn.disabled=true;btn.textContent="Reset in progress…"}const timer=document.getElementById("scrollResetTimer");if(timer)timer.textContent=formatResetTime(scrollResetRemaining);scrollResetInterval=setInterval(()=>{scrollResetRemaining=Math.max(0,scrollResetRemaining-1);const t=document.getElementById("scrollResetTimer");if(t)t.textContent=formatResetTime(scrollResetRemaining);if(scrollResetRemaining<=0){clearInterval(scrollResetInterval);scrollResetInterval=null;rewardProgress.urgePauses+=1;save();if(active==="rewards"){render();alert("You completed your 10-minute pause. Nice work choosing intentionally. You don't have to be perfect—just keep practising.")} }},1000)}
+function redeemReward(id){const r=rewardCatalog.find(x=>x.id===id);if(!r)return;const stock=Number(rewardProgress.stock[id]??r.stock);if(stock<=0){alert("This reward is currently out of stock.");return}if(rewardProgress.xp<r.cost){alert(`You need ${r.cost-rewardProgress.xp} more XP for this reward. Keep going at a sustainable pace.`);return}if(!confirm(`Redeem ${r.name} for ${r.cost} XP? This only records a claim in this prototype; it does not create a real card or discount.`))return;rewardProgress.xp-=r.cost;rewardProgress.stock[id]=stock-1;rewardProgress.redeemed.unshift({id,name:r.name,date:todayKey(),cost:r.cost});save();render();alert("Claim recorded locally. Ask the person managing the real-life rewards to provide the actual card or offer.")}
+const reflections=[
+ {quote:"You do not rise to the level of your goals; you fall to the level of your habits.",meaning:"A goal gives you direction, but the small actions you repeat are what carry you there. Make the next step easy enough to begin.",action:"Choose one task and work on it for just 10 focused minutes."},
+ {quote:"A little progress each day adds up to big results.",meaning:"Progress often feels invisible while it is happening. Repeated practice builds understanding and confidence over time.",action:"Review one concept, solve one question, or improve one small part of a project."},
+ {quote:"Discipline is keeping a promise to your future self.",meaning:"Motivation changes with mood. A realistic routine helps you act on ordinary days—but rest and flexibility belong in that routine too.",action:"Set a small target you can genuinely complete today."},
+ {quote:"Missing one day is a pause, not your identity.",meaning:"Consistency is not a perfect streak. It is the ability to return after a difficult day without turning one missed session into a week away.",action:"If yesterday did not go to plan, restart with the next useful step today."},
+ {quote:"Do not compare your chapter one with someone else's chapter twenty.",meaning:"Other people have different starting points, resources and timelines. Compare your current skills with what you knew before, and learn from others without judging yourself.",action:"Write down one thing you understand better now than last week."},
+ {quote:"Focus on the process; let results take the time they need.",meaning:"You control your effort, practice and choices more directly than outcomes. A good process gives results the best chance to follow.",action:"Work through one practice question carefully and learn from the mistake, if any."},
+ {quote:"Rest is part of progress, not the opposite of it.",meaning:"Your mind needs recovery to learn and focus. Sustainable effort beats a schedule that leaves you exhausted.",action:"Plan a real break and protect enough time for sleep."}
+];
+function todayKey(){return dateISO(new Date())}
+function dailyReflection(){const d=new Date();const start=new Date(d.getFullYear(),0,0);const day=Math.floor((d-start)/86400000);return reflections[day%reflections.length]}
+function checkInConsistency(){const todayStr=todayKey();if(consistency.lastCheckin===todayStr)return;const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);const yesterdayStr=dateISO(yesterday);consistency.streak=consistency.lastCheckin===yesterdayStr?consistency.streak+1:1;consistency.lastCheckin=todayStr;consistency.total+=1;rewardProgress.xp+=15;save();render()}
+
+function save(){try{localStorage.setItem("studentos-demo",JSON.stringify({subjects,tasks,notes,skills,groups,plan,planUsed,warningCount,moderationLocked,balanceChecks,consistency,rewardProgress}));}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem("studentos-demo"));if(d){subjects=d.subjects||subjects;tasks=d.tasks||tasks;notes=d.notes||notes;skills=d.skills||skills;groups=d.groups||[];plan=d.plan||plan;planUsed=!!d.planUsed;warningCount=d.warningCount||0;moderationLocked=!!d.moderationLocked;balanceChecks=d.balanceChecks||balanceChecks;consistency=d.consistency||consistency;rewardProgress={...rewardProgress,...(d.rewardProgress||{}),stock:{...rewardProgress.stock,...(d.rewardProgress?.stock||{})}};}}catch(e){}}
+load();
+function progressTask(t){return t.steps.length?Math.round(t.done.filter(Boolean).length/t.steps.length*100):0}
+function doneCount(){return tasks.reduce((n,t)=>n+t.done.filter(Boolean).length,0)}
+function navRender(){
+ $("#nav").innerHTML=navItems.map(([id,icon,label])=>`<button class="${active===id?"active":""}" data-page="${id}"><span>${icon}</span>${label}</button>`).join("");
+}
+function setPage(id){
+ if(interval){clearInterval(interval);interval=null;}
+ active=id;navRender();render();
+}
+$("#nav").addEventListener("click",e=>{let b=e.target.closest("button[data-page]");if(b)setPage(b.dataset.page)});
+function render(){
+ const item=navItems.find(n=>n[0]===active)||navItems[0];
+ $("#sectionLabel").textContent=item[2].toUpperCase();
+ $("#pageTitle").textContent=({home:"Welcome back 👋",planner:"Build a day that works for you",tasks:"Make big tasks feel smaller",focus:"Focus without overdoing it",skills:"Your next skill starts here",friends:"Study together, your way",notes:"Remember more, revise smarter",safety:"A respectful student community",balance:"Progress needs recovery too",rewards:"Rewards that support better habits"})[active];
+ const views={home:homePage,planner:plannerPage,tasks:tasksPage,focus:focusPage,skills:skillsPage,friends:friendsPage,notes:notesPage,rewards:rewardsPage,safety:safetyPage,balance:balancePage};
+ $("#content").innerHTML=views[active]();
+}
+function homePage(){
+ const done=doneCount(),total=tasks.reduce((n,t)=>n+t.steps.length,0);
+ const next=tasks.find(t=>progressTask(t)<100);
+ return `<section class="hero"><div class="eyebrow" style="color:#ded6ff">YOUR PERSONAL STUDENT SPACE</div>
+ <h2>Make progress, one small step at a time.</h2><p>Your studies, skills and wellbeing in one place. Start with what matters most today. You do not need to do everything at once.</p>
+ <button class="btn" onclick="setPage('planner')">Explore your demo timetable →</button></section>
+ ${(()=>{const r=dailyReflection();return `<section class="card motivation-card" style="margin-top:16px"><div class="row" style="align-items:flex-start;flex-wrap:wrap"><div style="flex:1;min-width:220px"><span class="pill">✦ TODAY'S REFLECTION</span><p class="motivation-quote" style="margin:14px 0 8px">“${esc(r.quote)}”</p><p class="motivation-meaning">${esc(r.meaning)}</p><p class="motivation-action">Your small action today: ${esc(r.action)}</p></div><div style="font-size:30px" aria-hidden="true">🌱</div></div><hr><div class="grid two"><div><div class="muted">Current consistency streak</div><div class="consistency-number">${consistency.streak} day${consistency.streak===1?"":"s"}</div><div class="muted">One check-in per day. Missing a day is a chance to restart, not a failure.</div></div><div><div class="muted">Days you checked in</div><div class="consistency-number">${consistency.total}</div><button class="btn checkin-btn" style="margin-top:8px" onclick="checkInConsistency()" ${consistency.lastCheckin===todayKey()?"disabled":""}>${consistency.lastCheckin===todayKey()?"👏 Checked in today":"👏 I showed up today"}</button></div></div></section>`})()}
+ <div class="grid stats">
+ <div class="card"><div class="stat-icon">📚</div><div class="stat-number">${subjects.length}</div><div class="stat-label">Subjects tracked</div></div>
+ <div class="card"><div class="stat-icon">✓</div><div class="stat-number">${done}</div><div class="stat-label">Small steps completed</div></div>
+ <div class="card"><div class="stat-icon">✦</div><div class="stat-number">${skills.filter(s=>s.progress>0).length}</div><div class="stat-label">Skills started</div></div>
+ <div class="card"><div class="stat-icon">☼</div><div class="stat-number">${focusMinutes}</div><div class="stat-label">Focus minutes this visit</div></div>
+ </div>
+ <section class="card" style="margin-bottom:16px"><div class="row" style="flex-wrap:wrap"><div><div class="eyebrow">EFFORT POINTS</div><h2 style="margin:5px 0">Your XP balance</h2><p class="muted" style="margin:0">Earn points by completing new task steps, focus sessions and a daily consistency check-in.</p></div><div class="reward-cost">${'${rewardProgress.xp}'} XP</div></div><button class="btn secondary" style="margin-top:12px" onclick="setPage('rewards')">View limited rewards and focus habits →</button></section>
+ <div class="grid two">
+ <section class="card"><div class="row"><h2>Today's priorities</h2><button class="btn light small" onclick="setPage('tasks')">View all</button></div>
+ ${next?`<div class="item"><span class="pill">${esc(next.priority)} priority</span><h3 style="margin-top:10px">${esc(next.title)}</h3><p class="muted">${esc(next.subject)} · ${next.done.filter(x=>!x).length} steps remaining</p><div class="progress"><div style="width:${progressTask(next)}%"></div></div><button class="btn small" onclick="setPage('tasks')">Continue task</button></div>`:`<p class="muted">Your demo tasks are complete. Add another when you're ready.</p>`}
+ <div class="item"><div class="row"><span>Overall task progress</span><b>${total?Math.round(done/total*100):0}%</b></div><div class="progress"><div style="width:${total?done/total*100:0}%"></div></div></div></section>
+ <section class="card"><div class="row"><h2>Coming up</h2><span class="pill">Demo exams</span></div><div class="list">
+ ${subjects.slice().sort((a,b)=>a.exam.localeCompare(b.exam)).slice(0,4).map(s=>`<div class="item"><div class="row"><b>${esc(s.name)}</b><span class="pill">${Math.max(0,Math.round((new Date(s.exam+"T00:00:00")-today)/86400000))} days</span></div><p class="muted">${dateLabel(s.exam)} · ${esc(s.level)} priority</p></div>`).join("")}
+ </div></section></div>
+ <div class="grid two" style="margin-top:16px"><section class="card"><h2>Suggested next step</h2><h3>🧠 Try active recall</h3><p class="muted">Close your notes and explain one concept from memory. Then check what you missed.</p><button class="btn secondary" onclick="setPage('notes')">Open revision</button></section>
+ <section class="card"><h2>Remember to take a break</h2><p class="muted">A break is part of the plan, not a reward you have to earn.</p><button class="btn secondary" onclick="setPage('focus')">Open focus room</button></section></div>`;
+}
+function plannerPage(){
+ return `<div class="notice">This example timetable is available before you create your own. It is a starting point, not a rule. Edit it to fit your classes, commute, responsibilities and sleep.</div>
+ <div class="row" style="margin:18px 0;flex-wrap:wrap"><h2 style="margin:0">Demo daily timetable</h2><div class="wrap"><button class="btn" onclick="planUsed=true;save();alert('Demo timetable selected! You can still edit it.');render()">✓ Use this timetable</button><button class="btn secondary" onclick="addPlan()">+ Add time block</button><button class="btn light" onclick="resetPlan()">Reset demo</button></div></div>
+ <div class="card"><div class="list">${plan.map((p,i)=>`<div class="item"><div class="row"><span class="pill">${esc(p.kind)}</span><button class="btn light small" onclick="editPlan(${i})">Edit</button></div><div class="grid two" style="margin-top:10px"><div><label>Time</label><input value="${esc(p.time)}" onchange="plan[${i}].time=this.value;save()"></div><div><label>Activity</label><input value="${esc(p.title)}" onchange="plan[${i}].title=this.value;save()"></div></div><div class="row" style="margin-top:8px"><span class="muted">Block ${i+1}</span><button class="btn danger small" onclick="plan.splice(${i},1);save();render()">Remove</button></div></div>`).join("")}</div>
+ <button class="btn" style="margin-top:15px" onclick="save();alert('Your demo timetable is saved in this browser.');">Save timetable</button></div>
+ <h2 style="margin-top:24px">Subjects and exam dates</h2><div class="grid two">${subjects.map((s,i)=>`<div class="card"><div class="row"><b>${esc(s.name)}</b><button class="btn danger small" onclick="subjects.splice(${i},1);save();render()">Remove</button></div><div class="field"><label>Exam date</label><input type="date" value="${esc(s.exam)}" onchange="subjects[${i}].exam=this.value;save()"></div><div class="field"><label>Priority</label><select onchange="subjects[${i}].level=this.value;save()">${["High","Medium","Low"].map(x=>`<option ${x===s.level?"selected":""}>${x}</option>`).join("")}</select></div></div>`).join("")}</div>
+ <div class="card" style="margin-top:16px"><h2>Add a subject</h2><form id="subjectForm"><div class="grid three"><div><label>Subject name</label><input name="name" required placeholder="e.g. Statistics"></div><div><label>Exam date</label><input type="date" name="exam" required value="${addDays(14)}"></div><div><label>Priority</label><select name="level"><option>Medium</option><option>High</option><option>Low</option></select></div></div><button class="btn" style="margin-top:12px">Add subject</button></form></div>`;
+}
+function addPlan(){
+ const time=prompt("Time block, e.g. 6:00–6:30");if(!time)return;
+ const title=prompt("What will you do in this block?");if(!title)return;
+ const kind=prompt("Category: Study, Break, Classes, Routine or Life","Study")||"Study";
+ plan.push({time,title,kind});save();render();
+}
+function editPlan(i){const p=plan[i];const t=prompt("Edit category",p.kind);if(t!==null){p.kind=t;save();render()}}
+function resetPlan(){if(confirm("Restore the original demo timetable?")){plan=[
+ {time:"7:00–7:30",title:"Wake up and get ready",kind:"Routine"},{time:"8:15–2:15",title:"College and classes",kind:"Classes"},{time:"2:15–3:15",title:"Lunch and rest",kind:"Break"},{time:"3:15–4:00",title:"Priority subject revision",kind:"Study"},{time:"4:00–4:10",title:"Short screen-free break",kind:"Break"},{time:"4:10–4:55",title:"Assignment: first small step",kind:"Study"},{time:"5:00–6:00",title:"Exercise or personal time",kind:"Life"},{time:"7:00–7:45",title:"Active recall and practice",kind:"Study"},{time:"7:45 onward",title:"Dinner, free time and sleep routine",kind:"Life"}];save();render()}}
+function tasksPage(){
+ return `<div class="notice">Big tasks become easier when the next action is obvious. Start with a small step, then decide what comes next. You can adjust the steps and deadlines at any time.</div>
+ <div class="row" style="margin:18px 0"><h2 style="margin:0">Your task list</h2><button class="btn" onclick="$('#newTask').classList.toggle('hidden')">+ Add task</button></div>
+ <div id="newTask" class="card hidden"><h2>New task</h2><form id="taskForm"><div class="field"><label>Task title</label><input name="title" required placeholder="e.g. Prepare lab report"></div><div class="grid three"><div><label>Subject</label><input name="subject" required placeholder="Subject"></div><div><label>Deadline</label><input type="date" name="due" required value="${addDays(3)}"></div><div><label>Priority</label><select name="priority"><option>Medium</option><option>High</option><option>Low</option></select></div></div><div class="field"><label>Steps (separate each step with a new line)</label><textarea name="steps" rows="4" placeholder="Read the instructions&#10;Complete the first part&#10;Review and submit"></textarea></div><button class="btn">Create task</button></form></div>
+ <div class="list" style="margin-top:16px">${tasks.map((t,i)=>`<section class="card"><div class="row"><span class="pill ${t.priority==="High"?"orange":""}">${esc(t.priority)} priority</span><span class="muted">Due ${dateLabel(t.due)}</span></div><h2 style="margin-top:12px">${esc(t.title)}</h2><p class="muted">${esc(t.subject)} · ${progressTask(t)}% complete</p><div class="progress"><div style="width:${progressTask(t)}%"></div></div>
+ <div class="list">${t.steps.map((s,j)=>`<div class="checkline"><input id="step-${t.id}-${j}" type="checkbox" ${t.done[j]?"checked":""} onchange="toggleTaskStep(${t.id},${j},this.checked)"><label class="${t.done[j]?"taskdone":""}" for="step-${t.id}-${j}">${esc(s)}</label><button class="btn light small" onclick="renameStep(${t.id},${j})">Edit</button></div>`).join("")}</div>
+ <div class="wrap" style="margin-top:15px"><button class="btn secondary small" onclick="addStep(${t.id})">+ Add small step</button><button class="btn light small" onclick="renameTask(${t.id})">Edit task</button><button class="btn danger small" onclick="deleteTask(${t.id})">Delete</button></div></section>`).join("")}</div>`;
+}
+function addStep(id){const s=prompt("What is the next small step?");if(s?.trim()){const t=tasks.find(t=>t.id===id);t.steps.push(s.trim());t.done.push(false);save();render()}}
+function renameStep(id,j){const t=tasks.find(t=>t.id===id);const s=prompt("Edit step",t.steps[j]);if(s?.trim()){t.steps[j]=s.trim();save();render()}}
+function renameTask(id){const t=tasks.find(t=>t.id===id);const s=prompt("Task title",t.title);if(s?.trim()){t.title=s.trim();save();render()}}
+function deleteTask(id){if(confirm("Delete this task?")){tasks=tasks.filter(t=>t.id!==id);save();render()}}
+function focusPage(){
+ return `<div class="grid two"><section class="card"><div class="center"><span class="pill" id="timerPill">${timerMode==="work"?"FOCUS SESSION":"REST BREAK"}</span><div class="timer-ring"><div class="muted" id="timerCaption">One step at a time</div><div class="timer" id="timerDisplay">${fmt(remaining)}</div><div class="muted" id="timerStatus">Ready when you are</div></div>
+ <div class="wrap" style="justify-content:center"><button class="btn" id="timerToggle" onclick="toggleTimer()">Start focus</button><button class="btn light" onclick="resetTimer()">Reset</button></div><p class="muted">Default: 25 minutes of focus, then a 5-minute break. You can stop or change the duration anytime.</p></div></section>
+ <section class="card"><h2>Make this session manageable</h2><div class="field"><label>What is your next small step?</label><input id="focusGoal" placeholder="e.g. Solve two questions"></div><div class="field"><label>Focus duration</label><select id="focusLength" onchange="changeLength()"><option value="15">15 minutes</option><option value="25" selected>25 minutes</option><option value="35">35 minutes</option><option value="45">45 minutes</option></select></div>
+ <div class="notice">During your break: stand up, stretch gently, drink water or look away from the screen. Return when you're ready. If you feel tired, take a longer break.</div><hr><h3>Focus reminders</h3><div class="list"><div class="item">✓ Silence nonessential notifications.</div><div class="item">✓ Keep only the materials you need nearby.</div><div class="item">✓ Stop if you feel unwell or overwhelmed.</div></div></section></div>`;
+}
+function fmt(s){return `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`}
+function changeLength(){if(timerMode==="work"){remaining=Number($("#focusLength").value)*60;$("#timerDisplay").textContent=fmt(remaining)}}
+function resetTimer(){if(interval)clearInterval(interval);interval=null;remaining=timerMode==="work"?(Number($("#focusLength")?.value)||25)*60:5*60;const d=$("#timerDisplay");if(d)d.textContent=fmt(remaining);const b=$("#timerToggle");if(b)b.textContent=timerMode==="work"?"Start focus":"Start break";const s=$("#timerStatus");if(s)s.textContent="Ready when you are"}
+function toggleTimer(){
+ if(interval){clearInterval(interval);interval=null;$("#timerToggle").textContent="Resume";$("#timerStatus").textContent="Paused";return}
+ $("#timerToggle").textContent="Pause";$("#timerStatus").textContent="In progress";
+ interval=setInterval(()=>{
+  remaining--;const d=$("#timerDisplay");if(d)d.textContent=fmt(remaining);
+  if(remaining<=0){
+   clearInterval(interval);interval=null;
+   if(timerMode==="work"){focusMinutes+=Number($("#focusLength")?.value||25);rewardProgress.xp+=40;save();timerMode="break";remaining=5*60;alert("Focus session complete! Time for a 5-minute break.");}
+   else{timerMode="work";remaining=(Number($("#focusLength")?.value)||25)*60;alert("Break complete. Ready for another session, or take more rest if you need it.");}
+   render();
+  }
+ },1000);
+}
+function skillsPage(){
+ const cats=["All","Technology","Communication","Creative","Business","Finance","Languages","Life skills","Academic"];
+ return `<div class="hero"><div class="eyebrow" style="color:#ded6ff">YOUR FUTURE, YOUR PACE</div><h2>Build skills beyond the classroom.</h2><p>Explore practical skills, start at your current level and learn by making small projects. You do not have to learn everything at once.</p></div>
+ <div class="grid stats"><div class="card"><div class="stat-number">${skills.length}</div><div class="stat-label">Skills to explore</div></div><div class="card"><div class="stat-number">${new Set(skills.map(s=>s.category)).size}</div><div class="stat-label">Skill categories</div></div><div class="card"><div class="stat-number">${skills.filter(s=>s.progress===100).length}</div><div class="stat-label">Completed paths</div></div><div class="card"><div class="stat-number">${skills.filter(s=>s.progress>0&&s.progress<100).length}</div><div class="stat-label">In progress</div></div></div>
+ <div class="card"><div class="grid two"><div><label>Search skills</label><input id="skillSearch" placeholder="Try Python, communication, finance..." oninput="filterSkills()"></div><div><label>Category</label><select id="skillCategory" onchange="filterSkills()">${cats.map(c=>`<option>${c}</option>`).join("")}</select></div></div><div class="field"><label>Level</label><select id="skillLevel" onchange="filterSkills()"><option>All levels</option><option>Beginner</option><option>Intermediate</option></select></div></div>
+ <div id="skillGrid" class="grid three" style="margin-top:16px"></div>`;
+}
+function filterSkills(){
+ const q=($("#skillSearch")?.value||"").toLowerCase(),cat=$("#skillCategory")?.value||"All",lev=$("#skillLevel")?.value||"All levels";
+ const list=skills.filter(s=>(cat==="All"||s.category===cat)&&(lev==="All levels"||s.level===lev||s.level==="All levels")&&(s.name+" "+s.description+" "+s.category+" "+s.detail).toLowerCase().includes(q));
+ $("#skillGrid").innerHTML=list.length?list.map(s=>`<div class="skill"><div class="emoji">${s.icon}</div><span class="pill">${esc(s.category)}</span><h3 style="margin-top:10px">${esc(s.name)}</h3><p>${esc(s.description)}</p><p>${esc(s.detail)}</p><div class="row"><span class="muted">${esc(s.level)}</span><b>${s.progress}%</b></div><div class="progress"><div style="width:${s.progress}%"></div></div><button class="btn ${s.progress?"secondary":" "}" onclick="skillProgress(${s.id})">${s.progress===100?"Completed":s.progress?"Continue learning":"Start skill"}</button></div>`).join(""):`<div class="card">No matching skills. Try another search or category.</div>`;
+}
+function skillProgress(id){const s=skills.find(s=>s.id===id);s.progress=s.progress===0?25:s.progress===25?50:s.progress===50?75:s.progress===75?100:100;save();filterSkills()}
+function friendsPage(){
+ return `<div class="notice">These are fictional demo contacts. This prototype does not access your phone, email or social accounts. In a real app, contact access must be optional and explicitly approved by you.</div>
+ <div class="grid two" style="margin-top:16px"><section class="card"><div class="row"><h2>Suggested study friends</h2><span class="pill">${contacts.filter(c=>c.online).length} online</span></div><p class="muted">Select only the people you want to study with.</p>
+ <div class="list">${contacts.map(c=>`<div class="contact"><input type="checkbox" aria-label="Select ${esc(c.name)}" ${selectedFriends.includes(c.id)?"checked":""} onchange="selectFriend(${c.id},this.checked)"><div class="avatar">${c.initial}</div><div class="person"><b>${esc(c.name)}</b><small>${esc(c.subject)}</small></div><span class="pill ${c.online?"green":""}">${c.online?"Online":"Offline"}</span></div>`).join("")}</div><p class="muted">${selectedFriends.length} selected</p><button class="btn" onclick="createGroupPrompt()">Create private group with selected friends</button></section>
+ <section class="card"><h2>Your private study groups</h2><p class="muted">Groups are invite-only in this demo. Only the people you select appear as members.</p>
+ ${groups.length?`<div class="list">${groups.map((g,i)=>`<div class="item"><div class="row"><b>🔒 ${esc(g.name)}</b><button class="btn danger small" onclick="deleteGroup(${i})">Delete</button></div><p class="muted">${g.members.length} selected members</p><div class="wrap">${g.members.map(id=>{const c=contacts.find(x=>x.id===id);return c?`<span class="pill">${esc(c.name)}</span>`:""}).join("")}</div><p class="muted">Private · Invitation only</p></div>`).join("")}</div>`:`<div class="center" style="padding:25px 0"><div style="font-size:38px">🔐</div><h3>No groups yet</h3><p class="muted">Choose friends on the left and create your first study group.</p></div>`}</section></div>
+ <section class="card" style="margin-top:16px"><h2>Good group study habits</h2><div class="grid three"><div><b>🎯 Agree on a goal</b><p class="muted">Choose one topic or a few questions before starting.</p></div><div><b>🤝 Share turns fairly</b><p class="muted">Let everyone explain, ask and contribute.</p></div><div><b>🛡️ Respect boundaries</b><p class="muted">Allow members to mute, leave or report inappropriate behaviour.</p></div></div></section>`;
+}
+function selectFriend(id,on){selectedFriends=on?[...new Set([...selectedFriends,id])]:selectedFriends.filter(x=>x!==id);render()}
+function createGroupPrompt(){
+ if(!selectedFriends.length){alert("Select at least one friend first.");return}
+ const name=prompt("Name your private study group:");if(!name?.trim())return;
+ groups.push({name:name.trim(),members:[...selectedFriends],created:Date.now()});selectedFriends=[];save();render();
+}
+function deleteGroup(i){if(confirm("Delete this demo group?")){groups.splice(i,1);save();render()}}
+function notesPage(){
+ const q=$("#noteSearch")?.value||"";
+ const list=notes.filter(n=>(n.title+" "+n.subject+" "+n.body).toLowerCase().includes(q.toLowerCase()));
+ return `<div class="grid two"><section class="card"><h2>Notes and revision cards</h2><label>Search your notes</label><input id="noteSearch" placeholder="Search topics, subjects or key points..." value="${esc(q)}" oninput="renderNotesList()"><p class="muted">Search matches note titles, subjects and note content.</p><div id="notesList" class="list" style="margin-top:12px">${noteList(list)}</div></section>
+ <section class="card"><h2>Add a note</h2><form id="noteForm"><div class="field"><label>Title</label><input name="title" required placeholder="Topic name"></div><div class="field"><label>Subject</label><input name="subject" required placeholder="Subject"></div><div class="field"><label>Key points</label><textarea name="body" rows="6" required placeholder="Write the main ideas in your own words"></textarea></div><button class="btn">Save note</button></form><hr><h3>Active recall method</h3><p class="muted">Read a small section, hide your notes, explain it from memory and check your answer. Revisit it later.</p></section></div>`;
+}
+function noteList(list){return list.length?list.map(n=>`<div class="item"><b>${esc(n.title)}</b><p class="muted">${esc(n.subject)}</p><p>${esc(n.body)}</p></div>`).join(""):`<p class="muted">No matching notes.</p>`}
+function renderNotesList(){const el=$("#notesList");if(el)el.innerHTML=noteList(notes.filter(n=>(n.title+" "+n.subject+" "+n.body).toLowerCase().includes(($("#noteSearch")?.value||"").toLowerCase())))}
+function safetyPage(){
+ return `<div class="notice warn"><b>Prototype safety demo:</b> This panel is not a real moderation service. Warnings and lockout state are stored only in this browser and can be reset by clearing its demo data. It cannot verify what actually happened.</div>
+ <div class="grid two" style="margin-top:16px"><section class="card"><div class="row"><h2>Community conduct</h2><span class="pill">Demo policy</span></div><p class="muted">The goal is to keep study spaces respectful and safe.</p><div class="list"><div class="item">1. No targeted harassment, threats or repeated abuse.</div><div class="item">2. No sharing private information without consent.</div><div class="item">3. Respect reports, group rules and member boundaries.</div><div class="item">4. Reports should be reviewed fairly, including context.</div></div><hr><h3>Report a concern (demo)</h3><form id="reportForm"><div class="field"><label>What is the concern?</label><select name="reason"><option>Abusive or insulting language</option><option>Harassment or bullying</option><option>Unwanted contact</option><option>Sharing private information</option><option>Other inappropriate behaviour</option></select></div><div class="field"><label>Brief description (do not include private personal details)</label><textarea name="detail" rows="3" placeholder="Describe the issue"></textarea></div><button class="btn">Submit demo report</button></form></section>
+ <section class="card"><h2>Warning and restriction simulator</h2><div class="stat-number">${warningCount}/3</div><div class="progress"><div style="width:${Math.min(100,warningCount/3*100)}%;background:${warningCount>=3?"#e55b68":"linear-gradient(90deg,#7057e8,#aa9bff)"}"></div></div>
+ ${moderationLocked?`<div class="notice danger"><b>Demo account locked.</b><p>In this simulation, the fourth incident triggers logout and blocks the demo session.</p></div><button class="btn light" onclick="demoAppeal()">Request demo review</button>`:`<p class="muted">Simulate a reviewed violation to see how warnings escalate. Do not use this to target a real person.</p><div class="list"><div class="item">First incident: warning and explanation.</div><div class="item">Second incident: stronger warning.</div><div class="item">Third incident: final warning and review.</div><div class="item">Fourth incident: lockout simulation.</div></div><button class="btn" onclick="simulateIncident()">Simulate reviewed incident</button>`}
+ <hr><button class="btn light" onclick="resetModeration()">Reset demo moderation</button><p class="muted">A real service should review evidence, allow appeals, protect reporters and enforce bans on the server. Keyword filters alone can misread jokes, context or reclaimed language.</p></section></div>`;
+}
+function simulateIncident(){
+ if(moderationLocked)return;
+ warningCount++;
+ if(warningCount>=4){moderationLocked=true;warningCount=4;save();active="safety";render();alert("Demo lockout: the simulated fourth incident has triggered a logout.");return}
+ save();render();alert(`Demo warning ${warningCount} of 3. A real platform would notify the user and document the decision.`);
+}
+function demoAppeal(){alert("Demo appeal submitted. A real platform should provide an independent review and explain the outcome. This prototype cannot send or review actual appeals.")}
+function resetModeration(){if(confirm("Reset the demo warning counter and lockout?")){warningCount=0;moderationLocked=false;save();render()}}
+function rewardsPage(){
+ const claimed=rewardProgress.redeemed.length;
+ return `<section class="hero"><div class="eyebrow" style="color:#ded6ff">EFFORT → REAL-LIFE REWARDS</div><h2>Rewards should celebrate effort, not pressure you.</h2><p>XP comes from useful actions—not endless screen time. Costs are deliberately high (2,000–3,500 XP), and each reward has limited stock so rewards take sustained effort. Your wellbeing and sleep matter more than points.</p><div class="wrap"><span class="xp-pill">✦ ${rewardProgress.xp} XP available</span><span class="pill">${claimed} claim${claimed===1?"":"s"} recorded</span></div></section>
+ <div class="notice" style="margin-top:16px">Important: this is a local prototype. It cannot provide, verify or redeem actual scratch cards or discounts. A trusted adult or reward manager must supply real cards/offers and set the available stock. Claims are stored only in this browser.</div>
+ <div class="grid two" style="margin-top:16px">${rewardCatalog.map(r=>{const stock=Number(rewardProgress.stock[r.id]??r.stock);const can=rewardProgress.xp>=r.cost&&stock>0;return `<section class="card reward-card"><div class="row"><span style="font-size:34px">${r.icon}</span><span class="pill ${stock>0?"green":"orange"}">${stock>0?`${stock} left`:"Out of stock"}</span></div><h2 class="reward-title" style="margin-top:14px">${esc(r.name)}</h2><p class="muted">${esc(r.detail)}</p><div class="reward-cost">${r.cost.toLocaleString()} XP</div><div class="progress"><div style="width:${Math.min(100,rewardProgress.xp/r.cost*100)}%"></div></div><p class="muted">${can?"You have enough XP to claim this reward.":stock<=0?"No cards currently available.":`${(r.cost-rewardProgress.xp).toLocaleString()} more XP needed.`}</p><button class="btn" ${can?"":"disabled"} onclick="redeemReward('${r.id}')">${stock<=0?"Unavailable":can?"Redeem with XP":"Keep earning XP"}</button></section>`}).join("")}</div>
+ <section class="card" style="margin-top:16px"><h2>How XP is earned</h2><div class="list"><div class="item row"><span>Complete a task step for the first time</span><b>+25 XP</b></div><div class="item row"><span>Finish a focus session</span><b>+40 XP</b></div><div class="item row"><span>Daily consistency check-in</span><b>+15 XP</b></div><div class="item row"><span>Choose an intentional screen break (once daily)</span><b>+10 XP</b></div></div><p class="muted">A step earns XP only once, so unchecking and rechecking it won't farm points. Don't extend screen time just to earn XP.</p></section>
+ <section class="card habit-highlight" style="margin-top:16px"><div class="eyebrow" style="color:#a24d64">SCROLLING RESET</div><h2 style="margin-top:7px">Make the pause easier than the scroll.</h2><p>Apps are designed to keep attention. The goal isn't to rely on willpower alone—add a little friction and choose what you want your time to do.</p><div class="grid two"><div class="habit-step"><b>1. Delay the urge by 10 minutes</b><p class="muted">When you notice automatic scrolling, place the phone out of reach and wait ten minutes before deciding.</p></div><div class="habit-step"><b>2. Replace, don't just remove</b><p class="muted">Pick a ready alternative: one song, a short walk, water, a page of reading, or messaging a friend intentionally.</p></div><div class="habit-step"><b>3. Make scrolling less automatic</b><p class="muted">Turn off nonessential notifications, move social apps off the home screen, and use built-in app limits or Focus mode.</p></div><div class="habit-step"><b>4. Restart without guilt</b><p class="muted">If you scroll longer than planned, notice the trigger and reset. One difficult moment doesn't erase progress.</p></div></div><div class="card" style="margin-top:14px;background:#fff;border-color:#f2d6e7"><div class="row" style="flex-wrap:wrap"><div><h3>10-minute urge reset</h3><p class="muted" style="margin:4px 0">Start this when you catch yourself opening an app automatically. Put your phone out of reach and do one small offline activity until the timer ends. This timer does not award XP, so it is about your habit—not farming points.</p></div><div id="scrollResetTimer" style="font-size:27px;font-weight:900;color:#a23c78;font-variant-numeric:tabular-nums">${formatResetTime(scrollResetRemaining>0?scrollResetRemaining:600)}</div></div><div class="wrap" style="margin-top:10px"><button class="btn" id="scrollResetButton" onclick="startScrollReset()" ${(scrollResetInterval||scrollResetRemaining>0)?"disabled":""}>${scrollResetInterval||scrollResetRemaining>0?"Reset in progress…":"▶ Start 10-minute reset"}</button><span class="pill">${rewardProgress.urgePauses} pause${rewardProgress.urgePauses===1?"":"s"} completed</span><button class="btn light small" onclick="pauseScrollUrge()">Log a pause without timer</button></div></div><hr><h3>Daily intentional screen break</h3><p class="muted">Mark this when you've taken one break away from optional scrolling today. It earns a small XP bonus once per day, not for staying offline all day.</p><div class="wrap"><button class="btn secondary" onclick="checkInHabit()" ${rewardProgress.lastHabitCheckin===todayKey()?"disabled":""}>${rewardProgress.lastHabitCheckin===todayKey()?"✓ Screen break checked in today":"✓ I took an intentional screen break (+10 XP)"}</button><span class="muted">${rewardProgress.habitCheckins} day${rewardProgress.habitCheckins===1?"":"s"} checked in</span></div></section>
+ ${rewardProgress.redeemed.length?`<section class="card" style="margin-top:16px"><h2>Previous claims</h2><div class="list">${rewardProgress.redeemed.map(x=>`<div class="item row"><div><b>${esc(x.name)}</b><div class="muted">Claim recorded ${dateLabel(x.date)}</div></div><span class="pill">−${x.cost.toLocaleString()} XP</span></div>`).join("")}</div></section>`:""}`;
+}
+function balancePage(){
+ return `<div class="hero"><div class="eyebrow" style="color:#ded6ff">A HEALTHIER ROUTINE</div><h2>You are a student, not a productivity machine.</h2><p>Sleep, meals, movement, friendships and downtime are part of a sustainable routine. Adjust your workload when life gets busy.</p></div>
+ <div class="grid two" style="margin-top:16px"><section class="card"><h2>Daily wellbeing check</h2><p class="muted">Check these when you've made space for them today.</p><div class="list">${Object.entries({sleep:"Allow enough time for sleep",food:"Eat regular meals and drink water",movement:"Make time for movement or stretching",free:"Keep some time for hobbies and people"}).map(([k,v])=>`<div class="checkline item"><input id="bal-${k}" type="checkbox" ${balanceChecks[k]?"checked":""} onchange="balanceChecks['${k}']=this.checked;save()"><label for="bal-${k}">${v}</label></div>`).join("")}</div><div class="progress"><div style="width:${Object.values(balanceChecks).filter(Boolean).length/4*100}%"></div></div><p class="muted">${Object.values(balanceChecks).filter(Boolean).length} of 4 wellbeing reminders checked</p></section>
+ <section class="card"><h2>When work feels overwhelming</h2><div class="list"><div class="item"><b>1. Pick one priority.</b><p class="muted">Choose what matters most, not everything at once.</p></div><div class="item"><b>2. Make the first step tiny.</b><p class="muted">Start with five minutes or one question.</p></div><div class="item"><b>3. Take a real break.</b><p class="muted">Pause, move around or do something relaxing.</p></div><div class="item"><b>4. Adjust the plan.</b><p class="muted">Move non-urgent work instead of sacrificing sleep.</p></div></div><button class="btn secondary" onclick="setPage('focus')">Open focus room</button></section></div>
+ <section class="card" style="margin-top:16px"><h2>Build a balanced day</h2><p class="muted">Start from the demo timetable, then make room for your own commitments. A useful timetable should be realistic enough to follow, not perfect on paper.</p><button class="btn" onclick="setPage('planner')">Customize my timetable</button></section>`;
+}
+function bindForms(){
+ $("#content").addEventListener("submit",e=>{
+  if(e.target.id==="subjectForm"){
+   e.preventDefault();const f=new FormData(e.target);subjects.push({name:f.get("name"),exam:f.get("exam"),level:f.get("level")});save();render();
+  }
+  if(e.target.id==="taskForm"){
+   e.preventDefault();const f=new FormData(e.target);let steps=String(f.get("steps")||"").split("\n").map(s=>s.trim()).filter(Boolean);if(!steps.length)steps=["Start the task","Complete the main work","Review the result"];tasks.push({id:Date.now(),title:f.get("title"),subject:f.get("subject"),due:f.get("due"),priority:f.get("priority"),steps,done:steps.map(()=>false)});save();render();
+  }
+  if(e.target.id==="noteForm"){
+   e.preventDefault();const f=new FormData(e.target);notes.unshift({title:f.get("title"),subject:f.get("subject"),body:f.get("body")});save();render();
+  }
+  if(e.target.id==="reportForm"){
+   e.preventDefault();alert("Demo report recorded locally for this interaction. No report was sent to a server or another person.");e.target.reset();
+  }
+ });
+}
+bindForms();
+function render(){
+ navRender();
+ const item=navItems.find(n=>n[0]===active)||navItems[0];
+ $("#sectionLabel").textContent=item[2].toUpperCase();
+ $("#pageTitle").textContent=({home:"Welcome back 👋",planner:"Build a day that works for you",tasks:"Make big tasks feel smaller",focus:"Focus without overdoing it",skills:"Your next skill starts here",friends:"Study together, your way",notes:"Remember more, revise smarter",safety:"A respectful student community",balance:"Progress needs recovery too",rewards:"Rewards that support better habits"})[active];
+ if(moderationLocked && active!=="safety"){
+  $("#content").innerHTML=`<section class="card center" style="padding:40px"><div style="font-size:48px">🔒</div><h2>Demo session locked</h2><p class="muted">The simulated fourth incident triggered a lockout. This is only a browser prototype, not a real account ban.</p><button class="btn" onclick="setPage('safety')">View demo status and appeal</button></section>`;return;
+ }
+ const views={home:homePage,planner:plannerPage,tasks:tasksPage,focus:focusPage,skills:skillsPage,friends:friendsPage,notes:notesPage,rewards:rewardsPage,safety:safetyPage,balance:balancePage};
+ $("#content").innerHTML=views[active]();
+ if(active==="skills")filterSkills();
+}
+render();
+</script>
+</body>
+</html>
